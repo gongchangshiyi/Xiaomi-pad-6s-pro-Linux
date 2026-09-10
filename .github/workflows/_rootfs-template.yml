@@ -202,9 +202,9 @@ jobs:
           EXISTING_BODY=$(gh release view "$TAG" --json body --jq '.body' 2>/dev/null || echo "")
           if [ -n "$EXISTING_BODY" ]; then
             printf '%s\n\n%s' "$EXISTING_BODY" "$(cat /tmp/release_body.md)" > /tmp/combined_body.md
-            gh release edit "$TAG" --body-file /tmp/combined_body.md
+            gh release edit "$TAG" --notes-file /tmp/combined_body.md
           else
-            gh release edit "$TAG" --body-file /tmp/release_body.md
+            gh release edit "$TAG" --notes-file /tmp/release_body.md
           fi
 
           # Publish the draft

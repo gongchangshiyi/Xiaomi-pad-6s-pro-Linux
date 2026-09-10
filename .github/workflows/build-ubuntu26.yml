@@ -6,7 +6,7 @@ on:
       kernel_version:
         description: '内核版本'
         required: true
-        default: '7.0'
+        default: '7.1'
       kernel_channel:
         description: '内核通道'
         required: true
@@ -18,13 +18,13 @@ on:
         required: true
         type: choice
         options: [all, gnome, kde, xfce]
-        default: 'all'
+        default: 'gnome'
       boot_mode:
         description: '启动模式'
         required: true
         type: choice
         options: [all, dual, single]
-        default: 'all'
+        default: 'dual'
       skip_release:
         description: '跳过创建GitHub Release'
         type: boolean

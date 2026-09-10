@@ -90,7 +90,7 @@ chroot "$ROOTDIR" apt-get install -y --no-install-recommends \
 deb_files=( *.deb )
 if [ ${#deb_files[@]} -gt 0 ] && [ -f "${deb_files[0]}" ]; then
     cp "${deb_files[@]}" "$ROOTDIR/tmp/"
-    chroot "$ROOTDIR" bash -c "export DEBIAN_FRONTEND=noninteractive && apt-get install -y /tmp/*.deb" || {
+    chroot "$ROOTDIR" bash -c "export DEBIAN_FRONTEND=noninteractive && apt-get install -y -o Dpkg::Options::='--force-overwrite' /tmp/*.deb" || {
         echo "Error: Kernel .deb installation failed, rootfs will not boot!" >&2
         exit 1
     }

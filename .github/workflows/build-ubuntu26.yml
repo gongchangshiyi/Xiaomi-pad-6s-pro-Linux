@@ -51,8 +51,6 @@ jobs:
       distro: ubuntu
       script: build-ubuntu26-rootfs.sh
       kernel_version_default: '7.0'
-      kernel_channel_default: 'mainline'
-      kernel_channel: ${{ github.event.inputs.kernel_channel }}
       desktop_env: ${{ github.event.inputs.desktop_env }}
       boot_mode: ${{ github.event.inputs.boot_mode }}
       desktop_matrix: '["all"]'

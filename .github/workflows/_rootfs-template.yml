@@ -211,3 +211,4 @@ jobs:
           gh release edit "$TAG" --draft=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}

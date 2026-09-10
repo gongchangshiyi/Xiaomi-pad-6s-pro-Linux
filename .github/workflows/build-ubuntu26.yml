@@ -12,7 +12,7 @@ on:
         required: true
         type: choice
         options: [mainline, stable]
-        default: 'mainline'
+        default: 'stable'
       desktop_env:
         description: '桌面环境'
         required: true
@@ -50,7 +50,7 @@ jobs:
     with:
       distro: ubuntu
       script: build-ubuntu26-rootfs.sh
-      kernel_version_default: '7.0'
+      kernel_version_default: ${{ github.event.inputs.kernel_version }}
       desktop_env: ${{ github.event.inputs.desktop_env }}
       boot_mode: ${{ github.event.inputs.boot_mode }}
       desktop_matrix: '["all"]'

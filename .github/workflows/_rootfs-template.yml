@@ -62,7 +62,7 @@ jobs:
       release_tag: ${{ steps.tag.outputs.release_tag }}
       build_success: ${{ steps.build.outcome }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Generate release tag
         id: tag
@@ -71,7 +71,7 @@ jobs:
           echo "release_tag=$TAG" >> $GITHUB_OUTPUT
 
       - name: Cache apt packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: /var/cache/apt/archives
           key: ${{ runner.os }}-apt-${{ inputs.release_tag_prefix }}-${{ hashFiles('.github/workflows/_rootfs-template.yml') }}
@@ -87,23 +87,24 @@ jobs:
       - name: Download kernel bundle
         run: |
           KERNEL_VER="${{ inputs.kernel_version_default }}"
-          echo "Downloading kernel bundle version=${KERNEL_VER}"
+          echo "Downloading kernel bundle version=${KERNEL_VER} from upstream"
 
+          UPSTREAM_REPO="code002-2/Xiaomi-pad-6s-pro-Linux"
           BUNDLE_TAG="kernel-bundle-latest"
           if ! gh release view "$BUNDLE_TAG" \
-              --repo "${{ github.repository }}" > /dev/null 2>&1; then
+              --repo "$UPSTREAM_REPO" > /dev/null 2>&1; then
             BUNDLE_TAG="kernel-bundle-${KERNEL_VER}"
             if ! gh release view "$BUNDLE_TAG" \
-                --repo "${{ github.repository }}" > /dev/null 2>&1; then
-              echo "错误: 内核 Bundle 发布不存在！" >&2
-              echo "尝试过的 tags: $BUNDLE_TAG" >&2
-              echo "请先通过 'Build Kernel' + 'Build Kernel Bundle' workflow 构建内核。" >&2
+                --repo "$UPSTREAM_REPO" > /dev/null 2>&1; then
+              echo "错误: 上游仓库的内核 Bundle 发布不存在！" >&2
+              echo "上游仓库: $UPSTREAM_REPO" >&2
+              echo "尝试过的 tags: kernel-bundle-latest, kernel-bundle-${KERNEL_VER}" >&2
               exit 1
             fi
           fi
 
           gh release download "$BUNDLE_TAG" \
-            --pattern "*.deb" --repo "${{ github.repository }}" --clobber
+            --pattern "*.deb" --repo "$UPSTREAM_REPO" --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
